@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Klaudia-Maria",
+  title: "Klaudia-Maria Music",
   description: "",
 };
 
