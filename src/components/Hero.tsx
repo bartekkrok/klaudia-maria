@@ -1,5 +1,3 @@
-
-
 const Hero = () => {
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -12,13 +10,13 @@ const Hero = () => {
                     opacity: 0.15
                 }}
             />
-            <div className="absolute inset-0 bg-gradient-hero z-0" />
+            <div className="absolute inset-0 bg-gradient-hero z-0"/>
 
             <div className="relative z-10 text-center px-4 max-w-4xl mx-auto fade-in">
-                <h1 className="text-6xl md:text-8xl font-bold mb-6 tracking-tight">
+                <h1 className="text-6xl md:text-8xl font-bold mb-6 tracking-tight  font-(family-name:--font-playfair)">
                     Klaudia-Maria
                 </h1>
-                <div className="h-1 w-24 bg-gradient-accent mx-auto mb-8" />
+                <div className="h-1 w-24 bg-gradient-accent mx-auto mb-8"/>
                 <p className="text-xl md:text-2xl text-muted-foreground font-light tracking-wide">
                     Wokalistka • Autorka piosenek • Marzycielka
                 </p>
