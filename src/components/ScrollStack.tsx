@@ -1,13 +1,12 @@
 "use client";
 
-import React, {ComponentClass, useRef} from "react";
+import React, {JSX, useRef} from "react";
 import {motion, MotionValue, useScroll, useTransform} from "framer-motion";
 
 interface Card {
     id: number | string;
-    title: string;
     bg: string;
-    iframe: ComponentClass
+    iframe: JSX.Element
 }
 
 interface StackParams {
@@ -22,7 +21,7 @@ const DEFAULT_PARAMS: StackParams = {
     startY: 600,
     stackY: 30,
     baseScale: 0.95,
-    scaleStep: 0.05,
+    scaleStep: 0.08,
     scaleBack: 0.95,
 };
 
@@ -99,7 +98,6 @@ export const ScrollStack: React.FC<ScrollStackProps> = ({cards, params}) => {
                                 height: 352,
                                 margin: "auto",
                                 transformOrigin: "top center", // ważne, żeby wjeżdżając w stack karta rosła od góry
-                                pointerEvents: "none",
                             }}
                             className={`flex items-center justify-center rounded-2xl shadow-xl ${card.bg}`}
                         >
