@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {motion, MotionValue, useScroll, useTransform} from "framer-motion";
 
 export interface Card {
@@ -78,11 +78,13 @@ const useCardAnimation = (
     scrollYProgress: MotionValue<number>,
     index: number,
     numCards: number,
+    viewportHeight: number,
     params: StackParams = DEFAULT_PARAMS
 ) => {
-    const {startY, stackY, baseScale, scaleStep, scaleBack} = params;
+    const {stackY, baseScale, scaleStep, scaleBack} = params;
 
-    // Pierwsza karta: start i end są takie same, więc transformacja będzie stała
+    const startY = viewportHeight + 100; // Zawsze poza ekranem 🔥
+
     const remainingCards = numCards - 1;
     const relativeIndex = index === 0 ? 0 : index - 1;
     const segment = 1 / Math.max(remainingCards, 1);
@@ -106,14 +108,12 @@ const useCardAnimation = (
 };
 
 
-interface ScrollStackProps {
-    params?: StackParams;
-}
-
-const ScrollStack: React.FC<ScrollStackProps> = ({params}) => {
+const ScrollStack = () => {
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const numCards = cards.length;
-    const stackParams = params || DEFAULT_PARAMS;
+    const [viewportHeight, setViewportHeight] = useState(800); // domyślnie
+    useEffect(() => {
+        setViewportHeight(window.innerHeight);
+    }, []);
 
     const {scrollYProgress} = useScroll({
         target: containerRef,
@@ -124,19 +124,26 @@ const ScrollStack: React.FC<ScrollStackProps> = ({params}) => {
         <div
             ref={containerRef}
             className="relative w-full"
-            style={{height: `${100 * numCards}vh`}}
+            style={{height: `${100 * cards.length}vh`}}
         >
             <div className="sticky top-0 h-screen w-full">
                 {cards.map((card, index) => {
-                    const {y, scale} = useCardAnimation(scrollYProgress, index, numCards, stackParams);
-                    const IframeComponent = card.iframe
+                    const {y, scale} = useCardAnimation(
+                        scrollYProgress,
+                        index,
+                        cards.length,
+                        viewportHeight,
+                        DEFAULT_PARAMS
+                    );
+                    const IframeComponent = card.iframe;
+
                     return (
                         <motion.div
                             key={card.id}
                             style={{
                                 y,
                                 scale,
-                                zIndex: index + 1, // rosnący index = karta wyżej
+                                zIndex: index + 1,
                                 position: "absolute",
                                 top: 0,
                                 left: 0,
@@ -145,17 +152,15 @@ const ScrollStack: React.FC<ScrollStackProps> = ({params}) => {
                                 width: "70%",
                                 height: 352,
                                 margin: "auto",
-                                overflow: 'hidden',
-                                transformOrigin: "top center", // ważne, żeby wjeżdżając w stack karta rosła od góry
+                                overflow: "hidden",
+                                transformOrigin: "top center",
                                 boxShadow: `
-                                  0 0 12px rgba(215, 66, 165, 0.6),     /* kolor bordera glow */
-                                  0 10px 25px rgba(0, 0, 0, 0.4),       /* miękka głębia pod spodem */
-                                  0 30px 60px rgba(0, 0, 0, 0.5)        /* głęboki cień */
+                                  0 0 12px rgba(215, 66, 165, 0.6),
+                                  0 10px 25px rgba(0, 0, 0, 0.4),
+                                  0 30px 60px rgba(0, 0, 0, 0.5)
                                 `,
-
-                                backdropFilter: "blur(4px)"
                             }}
-                            className={`flex items-center justify-center rounded-2xl shadow-xl`}
+                            className="flex items-center justify-center rounded-2xl"
                         >
                             <IframeComponent/>
                         </motion.div>
