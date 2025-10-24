@@ -5,15 +5,15 @@ import {motion, MotionValue, useScroll, useTransform} from "framer-motion";
 
 export interface Card {
     id: number | string;
-    iframe: React.ReactNode
+    iframe: React.ReactNode;
 }
 
 interface StackParams {
-    startY: number;    // początkowa pozycja Y dla kart w tle
-    stackY: number;    // docelowe odsunięcie w stacku (wystające z dołu)
-    baseScale: number; // skala najmniejszej karty
-    scaleStep: number; // przyrost skali dla kolejnych kart
-    scaleBack: number; // cofnięcie po osiągnięciu miejsca docelowego
+    startY: number;
+    stackY: number;
+    baseScale: number;
+    scaleStep: number;
+    scaleBack: number;
 }
 
 const DEFAULT_PARAMS: StackParams = {
@@ -24,56 +24,57 @@ const DEFAULT_PARAMS: StackParams = {
     scaleBack: 0.95,
 };
 
-const ToksycznyIframe = () => <iframe
-    data-testid="embed-iframe"
-    style={{borderRadius: "12px"}}
-    src="https://open.spotify.com/embed/track/6yRyOXOi8aZyT1BQFIAses?utm_source=generator"
-    width="100%"
-    height="352"
-    frameBorder="0"
-    allowFullScreen
-    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-    loading="lazy"
-/>
+const ToksycznyIframe = () => (
+    <iframe
+        style={{borderRadius: "12px"}}
+        src="https://open.spotify.com/embed/track/6yRyOXOi8aZyT1BQFIAses?utm_source=generator"
+        width="100%"
+        height="352"
+        frameBorder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    />
+);
 
+const GhostingIframe = () => (
+    <iframe
+        style={{borderRadius: "12px"}}
+        src="https://open.spotify.com/embed/track/3P4u2xwspyWcwN6BUt1YAw?utm_source=generator"
+        width="100%"
+        height="352"
+        frameBorder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    />
+);
 
-const GhostingIframe = () => <iframe data-testid="embed-iframe" style={{borderRadius: "12px"}}
-                                     src="https://open.spotify.com/embed/track/3P4u2xwspyWcwN6BUt1YAw?utm_source=generator"
-                                     width="100%" height="352" frameBorder="0" allowFullScreen
-                                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                     loading="lazy"></iframe>
+const ChceZapomniecIframe = () => (
+    <iframe
+        style={{borderRadius: "12px"}}
+        src="https://open.spotify.com/embed/track/2pOe7Ambcy8TooJUazmBwC?utm_source=generator"
+        width="100%"
+        height="352"
+        frameBorder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    />
+);
 
-const ChceZapomniecIframe = () => <iframe data-testid="embed-iframe" style={{borderRadius: "12px"}}
-                                          src="https://open.spotify.com/embed/track/2pOe7Ambcy8TooJUazmBwC?utm_source=generator"
-                                          width="100%"
-                                          height="352" frameBorder="0" allowFullScreen
-                                          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                          loading="lazy"></iframe>
-
-const NoweRozdanieIframe = () => <iframe data-testid="embed-iframe" style={{borderRadius: "12px"}}
-                                         src="https://open.spotify.com/embed/track/1ZPYNtCNTDXj4tJzaXCQWS?utm_source=generator&theme=0"
-                                         width="100%" height="352" frameBorder="0" allowFullScreen
-                                         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                         loading="lazy"></iframe>
+const NoweRozdanieIframe = () => (
+    <iframe
+        style={{borderRadius: "12px"}}
+        src="https://open.spotify.com/embed/track/1ZPYNtCNTDXj4tJzaXCQWS?utm_source=generator&theme=0"
+        width="100%"
+        height="352"
+        frameBorder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    />
+);
 
 const cards = [
-    {
-        id: 1,
-        iframe: ToksycznyIframe
-    },
-    {
-        id: 2,
-        iframe: GhostingIframe
-    },
-    {
-        id: 3,
-        iframe: ChceZapomniecIframe
-    },
-    {
-        id: 4,
-        iframe: NoweRozdanieIframe
-    },
+    {id: 1, iframe: ToksycznyIframe},
+    {id: 2, iframe: GhostingIframe},
+    {id: 3, iframe: ChceZapomniecIframe},
+    {id: 4, iframe: NoweRozdanieIframe},
 ];
+
 const useCardAnimation = (
     scrollYProgress: MotionValue<number>,
     index: number,
@@ -82,8 +83,7 @@ const useCardAnimation = (
     params: StackParams = DEFAULT_PARAMS
 ) => {
     const {stackY, baseScale, scaleStep, scaleBack} = params;
-
-    const startY = viewportHeight + 100; // Zawsze poza ekranem 🔥
+    const startY = viewportHeight + 100;
 
     const remainingCards = numCards - 1;
     const relativeIndex = index === 0 ? 0 : index - 1;
@@ -98,19 +98,31 @@ const useCardAnimation = (
         [index === 0 ? stackY * index : startY, stackY * index]
     );
 
-    const scale = useTransform(
+    const scaleBase = useTransform(
         scrollYProgress,
         [cardStart, cardEnd],
         [baseScale + scaleStep * index, scaleBack + scaleStep * index]
     );
 
+    // ✅ shrink efekt – każdy hook wywołany zawsze!
+    const extraShrink = useTransform(
+        scrollYProgress,
+        [cardEnd, Math.min(cardEnd + 0.1, 1)], // ~200px
+        index === 0 ? [0, 0] : [0, -0.03] // tylko karty > 0
+    );
+
+    const scale = useTransform(
+        [scaleBase, extraShrink],
+        ([s, shrink]) => s + shrink
+    );
+
     return {y, scale};
 };
 
-
 const ScrollStack = () => {
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const [viewportHeight, setViewportHeight] = useState(800); // domyślnie
+    const [viewportHeight, setViewportHeight] = useState(800);
+
     useEffect(() => {
         setViewportHeight(window.innerHeight);
     }, []);
@@ -121,20 +133,10 @@ const ScrollStack = () => {
     });
 
     return (
-        <div
-            ref={containerRef}
-            className="relative w-full"
-            style={{height: `${100 * cards.length}vh`}}
-        >
+        <div ref={containerRef} className="relative w-full" style={{height: `${100 * cards.length}vh`}}>
             <div className="sticky top-0 h-screen w-full">
                 {cards.map((card, index) => {
-                    const {y, scale} = useCardAnimation(
-                        scrollYProgress,
-                        index,
-                        cards.length,
-                        viewportHeight,
-                        DEFAULT_PARAMS
-                    );
+                    const {y, scale} = useCardAnimation(scrollYProgress, index, cards.length, viewportHeight);
                     const IframeComponent = card.iframe;
 
                     return (
@@ -145,22 +147,14 @@ const ScrollStack = () => {
                                 scale,
                                 zIndex: index + 1,
                                 position: "absolute",
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
                                 width: "70%",
                                 height: 352,
                                 margin: "auto",
-                                overflow: "hidden",
+                                inset: 0,
                                 transformOrigin: "top center",
-                                boxShadow: `
-                                  0 0 12px rgba(215, 66, 165, 0.6),
-                                  0 10px 25px rgba(0, 0, 0, 0.4),
-                                  0 30px 60px rgba(0, 0, 0, 0.5)
-                                `,
+                                boxShadow: "0 8px 40px rgba(0,0,0,0.4)",
                             }}
-                            className="flex items-center justify-center rounded-2xl"
+                            className="rounded-2xl overflow-hidden"
                         >
                             <IframeComponent/>
                         </motion.div>
