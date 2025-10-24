@@ -12,7 +12,7 @@ const Background = () => {
             iterationsPoisson={32}
             resolution={0.5}
             isBounce={false}
-            autoDemo={false}
+            autoDemo={true}
             autoSpeed={0.5}
             autoIntensity={2.2}
             takeoverDuration={0.25}
