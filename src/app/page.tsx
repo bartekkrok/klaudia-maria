@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import Discography from "@/components/Discography";
+import Background from "@/components/Background";
 
 export default function Home() {
     return (
@@ -11,6 +12,7 @@ export default function Home() {
             <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
 
             </footer>
+            <Background/>
         </div>
     );
 }

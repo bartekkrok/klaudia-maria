@@ -110,11 +110,12 @@ const useCardAnimation = (
         [cardEnd, Math.min(cardEnd + 0.1, 1)], // ~200px
         index === 0 ? [0, 0] : [0, -0.03] // tylko karty > 0
     );
-
-    const scale = useTransform(
-        [scaleBase, extraShrink],
-        ([s, shrink]) => s + shrink
+    
+    const scale: MotionValue<number> = useTransform(
+        [scaleBase, extraShrink] as [MotionValue<number>, MotionValue<number>],
+        ([s, shrink]: number[]) => s + shrink
     );
+
 
     return {y, scale};
 };
