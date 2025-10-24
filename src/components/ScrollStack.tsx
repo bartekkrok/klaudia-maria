@@ -110,7 +110,7 @@ const useCardAnimation = (
         [cardEnd, Math.min(cardEnd + 0.1, 1)], // ~200px
         index === 0 ? [0, 0] : [0, -0.03] // tylko karty > 0
     );
-    
+
     const scale: MotionValue<number> = useTransform(
         [scaleBase, extraShrink] as [MotionValue<number>, MotionValue<number>],
         ([s, shrink]: number[]) => s + shrink
@@ -135,6 +135,10 @@ const ScrollStack = () => {
 
     return (
         <div ref={containerRef} className="relative w-full" style={{height: `${100 * cards.length}vh`}}>
+            <div className="sticky top-0 text-center fade-in">
+                <h2 className="text-5xl md:text-6xl font-bold mb-4">Discography</h2>
+                <div className="h-1 w-24 bg-gradient-accent mx-auto"/>
+            </div>
             <div className="sticky top-0 h-screen w-full">
                 {cards.map((card, index) => {
                     const {y, scale} = useCardAnimation(scrollYProgress, index, cards.length, viewportHeight);
