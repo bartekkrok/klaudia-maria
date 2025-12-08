@@ -68,11 +68,41 @@ const NoweRozdanieIframe = () => (
   />
 );
 
+const MialamWiareIframe = () => {
+  return (
+    <iframe
+      style={{ borderRadius: "12px" }}
+      src="https://open.spotify.com/embed/track/7ak8O1AmGGafGcOr4a9m0b?utm_source=generator"
+      width="100%"
+      height="352"
+      frameBorder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"
+    ></iframe>
+  );
+};
+
+const BrakujeTchuIframe = () => {
+  return (
+    <iframe
+      style={{ borderRadius: "12px" }}
+      src="https://open.spotify.com/embed/track/6GRvoG794YU0N0tIVdslp9?utm_source=generator"
+      width="100%"
+      height="352"
+      frameBorder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"
+    ></iframe>
+  );
+};
+
 const cards = [
   { id: 1, iframe: ToksycznyIframe },
   { id: 2, iframe: GhostingIframe },
   { id: 3, iframe: ChceZapomniecIframe },
   { id: 4, iframe: NoweRozdanieIframe },
+  { id: 5, iframe: MialamWiareIframe },
+  { id: 6, iframe: BrakujeTchuIframe },
 ];
 
 const useCardAnimation = (
