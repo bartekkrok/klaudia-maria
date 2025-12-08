@@ -857,6 +857,7 @@ export default function DomeGallery({
     <>
       <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
       <div
+        id={"gallery"}
         ref={rootRef}
         className="sphere-root relative w-screen h-screen"
         style={

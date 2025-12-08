@@ -6,7 +6,7 @@ const menuItems = [
   { label: "Wstęp", ariaLabel: "Wstęp", link: "#hero" },
   { label: "Dyskografia", ariaLabel: "Learn about us", link: "#discography" },
   // { label: "Koncerty", ariaLabel: "Koncerty", link: "#concerts" },
-  // { label: "Galeria", ariaLabel: "View our services", link: "#gallery" },
+  { label: "Galeria", ariaLabel: "View our services", link: "#gallery" },
   // { label: "Kontakt", ariaLabel: "Get in touch", link: "#contact" },
 ];
 
