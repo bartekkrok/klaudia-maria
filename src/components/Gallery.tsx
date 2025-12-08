@@ -81,7 +81,7 @@ type ItemDef = {
 
 const DEFAULTS = {
   minRadius: window?.innerHeight,
-  maxVerticalRotationDeg: 5,
+  maxVerticalRotationDeg: 0,
   dragSensitivity: 20,
   enlargeTransitionMs: 300,
   segments: 35,
