@@ -3,15 +3,23 @@ import Discography from "@/components/Discography";
 import Background from "@/components/Background";
 import Menu from "@/components/Menu";
 import Gallery from "@/components/Gallery";
+import { headers } from "next/headers";
 
-export default function Home() {
+export default async function Home() {
+  const headersList = await headers();
+  const userAgent = headersList.get("user-agent") || "";
+  const isMobile =
+    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+      userAgent,
+    );
+
   return (
     <div>
       <Menu />
       <main>
         <Hero />
         <Discography />
-        <Gallery />
+        <Gallery maxVerticalRotationDeg={isMobile ? 0 : 5} grayscale={false} />
       </main>
       <footer className="bg-white rounded-[16px] shadow-sm dark:bg-gray-900 m-4">
         <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
