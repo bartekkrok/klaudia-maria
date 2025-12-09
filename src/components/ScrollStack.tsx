@@ -168,7 +168,7 @@ const ScrollStack = () => {
       className="relative w-full"
       style={{ height: `${100 * cards.length}vh` }}
     >
-      <div className="sticky top-0 text-center fade-in">
+      <div className="sticky top-0 text-center fade-in max-md:-mt-[80px] pt-[80px] max-md:mb-[-150px]">
         <h2 className="text-5xl md:text-6xl font-bold mb-4">Dyskografia</h2>
         <div className="h-1 w-24 bg-gradient-accent mx-auto" />
       </div>
