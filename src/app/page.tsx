@@ -4,6 +4,7 @@ import Background from "@/components/Background";
 import Menu from "@/components/Menu";
 import Gallery from "@/components/Gallery";
 import { headers } from "next/headers";
+import React from "react";
 
 export default async function Home() {
   const headersList = await headers();
@@ -19,7 +20,16 @@ export default async function Home() {
       <main>
         <Hero />
         <Discography />
-        <Gallery maxVerticalRotationDeg={isMobile ? 0 : 5} grayscale={false} />
+        <section>
+          <div className="top-0 text-center fade-in pt-[80px] pb-[80px] max-md:pb-0 max-md:pt-0">
+            <h2 className="text-5xl md:text-6xl font-bold mb-4">Galeria</h2>
+            <div className="h-1 w-24 bg-gradient-accent mx-auto" />
+          </div>
+          <Gallery
+            maxVerticalRotationDeg={isMobile ? 0 : 5}
+            grayscale={false}
+          />
+        </section>
       </main>
       <footer className="bg-white rounded-[16px] shadow-sm dark:bg-gray-900 m-4">
         <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
