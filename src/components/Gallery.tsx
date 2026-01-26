@@ -80,7 +80,7 @@ type ItemDef = {
 };
 
 const DEFAULTS = {
-  minRadius: window?.innerHeight,
+  minRadius: typeof window !== 'undefined' ? window.innerHeight : 800,
   maxVerticalRotationDeg: 0,
   dragSensitivity: 20,
   enlargeTransitionMs: 300,
