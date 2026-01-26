@@ -406,13 +406,11 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   ]);
 
   return (
-    <div
-      className={`sm-scope z-40 ${isFixed ? "fixed top-0 right-0 w-[100vw] md:w-[60vw]  h-screen overflow-hidden" : "w-full h-full"} ${open ? "pointer-events-auto" : "pointer-events-none"}`}
-    >
+    <>
       {open && (
         <button
           type="button"
-          className="sm-menu-overlay fixed top-0 left-0 w-full h-full bg-black/40 z-30 border-0 p-0 cursor-pointer"
+          className="sm-menu-overlay fixed inset-0 w-screen h-screen bg-black/40 border-0 p-0 cursor-pointer z-[35]"
           aria-label="Close menu"
           onClick={() => {
             openRef.current = false;
@@ -427,18 +425,22 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       )}
 
       <div
-        className={
-          (className ? `${className} ` : "") +
-          "staggered-menu-wrapper relative w-full h-full z-40"
-        }
-        style={
-          accentColor
-            ? ({ "--sm-accent": accentColor } as React.CSSProperties)
-            : undefined
-        }
-        data-position={position}
-        data-open={open || undefined}
+        className={`sm-scope z-40 ${isFixed ? "fixed top-0 right-0 w-[100vw] md:w-[60vw]  h-screen overflow-hidden" : "w-full h-full"} pointer-events-none`}
       >
+        <div
+          className={
+            (className ? `${className} ` : "") +
+            "staggered-menu-wrapper relative w-full h-full z-40 pointer-events-none"
+          }
+          style={
+            accentColor
+              ? ({ "--sm-accent": accentColor } as React.CSSProperties)
+              : undefined
+          }
+          data-position={position}
+          data-open={open || undefined}
+        >
+
         <div
           ref={preLayersRef}
           className="sm-prelayers absolute top-0 right-0 bottom-0 pointer-events-none z-[5]"
@@ -465,7 +467,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
         <header
           className={
-            "staggered-menu-header absolute top-0 left-0 w-full flex items-center justify-between p-[2em] pointer-events-none z-20" +
+            "staggered-menu-header absolute top-0 left-0 w-full flex items-center justify-between p-[2em] pointer-events-none z-[50]" +
             `${open ? "" : headerMobileStyles}`
           }
         >
@@ -530,7 +532,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         <aside
           id="staggered-menu-panel"
           ref={panelRef}
-          className="staggered-menu-panel absolute top-0 right-0 h-full bg-white flex flex-col p-[6em_2em_2em_2em] overflow-y-auto z-10 backdrop-blur-[12px] border-l-4 border-[#e05299]"
+          className="staggered-menu-panel absolute top-0 right-0 h-full bg-white flex flex-col p-[6em_2em_2em_2em] overflow-y-auto z-[30] backdrop-blur-[12px] border-l-4 border-[#e05299] pointer-events-auto"
           style={{ WebkitBackdropFilter: "blur(12px)" }}
           aria-hidden={!open}
         >
@@ -656,7 +658,8 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 @media (max-width: 1024px) { .sm-scope .staggered-menu-panel { width: 100%; left: 0; right: 0; } .sm-scope .staggered-menu-wrapper[data-open] .sm-logo-img { filter: invert(100%); } }
 @media (max-width: 640px) { .sm-scope .staggered-menu-panel { width: 100%; left: 0; right: 0; } .sm-scope .staggered-menu-wrapper[data-open] .sm-logo-img { filter: invert(100%); } }
       `}</style>
-    </div>
+      </div>
+    </>
   );
 };
 
