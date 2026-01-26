@@ -4,10 +4,9 @@ import StaggeredMenu from "./StaggeredMenu";
 
 const menuItems = [
   { label: "Wstęp", ariaLabel: "Wstęp", link: "#hero" },
-  { label: "Dyskografia", ariaLabel: "Learn about us", link: "#discography" },
-  // { label: "Koncerty", ariaLabel: "Koncerty", link: "#concerts" },
-  { label: "Galeria", ariaLabel: "View our services", link: "#gallery" },
-  // { label: "Kontakt", ariaLabel: "Get in touch", link: "#contact" },
+  { label: "Dyskografia", ariaLabel: "Dyskografia", link: "#discography" },
+  { label: "Galeria", ariaLabel: "Galeria", link: "#gallery" },
+  { label: "Kontakt", ariaLabel: "Kontakt", link: "#contact" },
 ];
 
 const socialItems = [

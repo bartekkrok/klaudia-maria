@@ -4,6 +4,7 @@ import Discography from "@/components/Discography";
 import Gallery from "@/components/Gallery";
 import Hero from "@/components/Hero";
 import Menu from "@/components/Menu";
+import Contact from "@/components/Contact";
 
 export default async function Home() {
   const headersList = await headers();
@@ -30,6 +31,7 @@ export default async function Home() {
           />
         </section>
       </main>
+      <Contact />
       <footer className="bg-white rounded-[16px] shadow-sm dark:bg-gray-900 m-4">
         <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
           <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
