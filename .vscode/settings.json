@@ -23,15 +23,10 @@
   "[jsonc]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-
   "prettier.enable": false,
   "eslint.enable": false,
-
-  // Biome extension settings
   "biome.enabled": true,
   "biome.lspBin": "./node_modules/@biomejs/biome/bin/biome",
-
-  // Editor settings
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "editor.rulers": [80, 100],
@@ -39,8 +34,6 @@
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
   "files.eol": "\n",
-
-  // File exclusions
   "files.exclude": {
     "**/.git": true,
     "**/.DS_Store": true,
@@ -49,8 +42,6 @@
     "**/dist": true,
     "**/build": true
   },
-
-  // Search exclusions
   "search.exclude": {
     "**/node_modules": true,
     "**/.next": true,
@@ -60,20 +51,12 @@
     "**/yarn.lock": true,
     "**/package-lock.json": true
   },
-
-  // TypeScript settings
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-
-  // Tailwind CSS IntelliSense
   "tailwindCSS.experimental.classRegex": [
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ],
-
-  // Next.js settings
   "nextjs.linkFileExtensions": ["js", "jsx", "ts", "tsx"],
-
-  // Git
   "git.ignoreLimitWarning": true
 }

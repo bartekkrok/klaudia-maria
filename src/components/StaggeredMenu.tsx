@@ -1,5 +1,5 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 const headerMobileStyles =
   "max-md:h-auto max-md:w-full max-md:bg-pink-100 max-md:rounded-md max-md:bg-clip-padding max-md:backdrop-filter max-md:backdrop-blur-md max-md:bg-opacity-30 max-md:pointer-events-auto";
@@ -41,7 +41,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   displaySocials = true,
   displayItemNumbering = true,
   className,
-  logoUrl = "/src/assets/logos/reactbits-gh-white.svg",
+  logoUrl: _logoUrl = "/src/assets/logos/reactbits-gh-white.svg",
   menuButtonColor = "#fff",
   openMenuButtonColor = "#fff",
   changeMenuColorOnOpen = true,
@@ -143,8 +143,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     const panelStart = Number(gsap.getProperty(panel, "xPercent"));
 
     if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 });
-    if (numberEls.length)
-      gsap.set(numberEls, { ["--sm-num-opacity" as any]: 0 });
+    if (numberEls.length) gsap.set(numberEls, { "--sm-num-opacity": 0 });
     if (socialTitle) gsap.set(socialTitle, { opacity: 0 });
     if (socialLinks.length) gsap.set(socialLinks, { y: 25, opacity: 0 });
 
@@ -192,7 +191,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           {
             duration: 0.6,
             ease: "power2.out",
-            ["--sm-num-opacity" as any]: 1,
+            "--sm-num-opacity": 1,
             stagger: { each: 0.08, from: "start" },
           },
           itemsStart + 0.1,
@@ -229,7 +228,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
     openTlRef.current = tl;
     return tl;
-  }, [position]);
+  }, []);
 
   const playOpen = useCallback(() => {
     if (busyRef.current) return;
@@ -275,8 +274,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             ".sm-panel-list[data-numbering] .sm-panel-item",
           ),
         ) as HTMLElement[];
-        if (numberEls.length)
-          gsap.set(numberEls, { ["--sm-num-opacity" as any]: 0 });
+        if (numberEls.length) gsap.set(numberEls, { "--sm-num-opacity": 0 });
 
         const socialTitle = panel.querySelector(
           ".sm-socials-title",
@@ -412,8 +410,10 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       className={`sm-scope z-40 ${isFixed ? "fixed top-0 right-0 w-[100vw] md:w-[60vw]  h-screen overflow-hidden" : "w-full h-full"} ${open ? "pointer-events-auto" : "pointer-events-none"}`}
     >
       {open && (
-        <div
-          className="sm-menu-overlay fixed top-0 left-0 w-full h-full bg-black/40 z-30"
+        <button
+          type="button"
+          className="sm-menu-overlay fixed top-0 left-0 w-full h-full bg-black/40 z-30 border-0 p-0 cursor-pointer"
+          aria-label="Close menu"
           onClick={() => {
             openRef.current = false;
             setOpen(false);
@@ -428,12 +428,12 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
       <div
         className={
-          (className ? className + " " : "") +
+          (className ? `${className} ` : "") +
           "staggered-menu-wrapper relative w-full h-full z-40"
         }
         style={
           accentColor
-            ? ({ ["--sm-accent" as any]: accentColor } as React.CSSProperties)
+            ? ({ "--sm-accent": accentColor } as React.CSSProperties)
             : undefined
         }
         data-position={position}
@@ -445,11 +445,10 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           aria-hidden="true"
         >
           {(() => {
-            const raw =
-              colors && colors.length
-                ? colors.slice(0, 4)
-                : ["#1e1e22", "#35353c"];
-            let arr = [...raw];
+            const raw = colors?.length
+              ? colors.slice(0, 4)
+              : ["#1e1e22", "#35353c"];
+            const arr = [...raw];
             if (arr.length >= 3) {
               const mid = Math.floor(arr.length / 2);
               arr.splice(mid, 1);
@@ -469,12 +468,8 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             "staggered-menu-header absolute top-0 left-0 w-full flex items-center justify-between p-[2em] pointer-events-none z-20" +
             `${open ? "" : headerMobileStyles}`
           }
-          aria-label="Main navigation header"
         >
-          <div
-            className="sm-logo flex items-center select-none pointer-events-auto"
-            aria-label="Logo"
-          >
+          <div className="sm-logo flex items-center select-none pointer-events-auto">
             {/*<img*/}
             {/*    src={logoUrl || '/src/assets/logos/reactbits-gh-white.svg'}*/}
             {/*    alt="Logo"*/}
@@ -542,10 +537,9 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           <div className="sm-panel-inner flex-1 flex flex-col gap-5">
             <ul
               className="sm-panel-list list-none m-0 p-0 flex flex-col gap-2"
-              role="list"
               data-numbering={displayItemNumbering || undefined}
             >
-              {items && items.length ? (
+              {items?.length ? (
                 items.map((it, idx) => (
                   <li
                     className="sm-panel-itemWrap relative overflow-hidden leading-none"
@@ -595,17 +589,11 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             </ul>
 
             {displaySocials && socialItems && socialItems.length > 0 && (
-              <div
-                className="sm-socials mt-auto pt-8 flex flex-col gap-3"
-                aria-label="Social links"
-              >
+              <nav className="sm-socials mt-auto pt-8 flex flex-col gap-3">
                 <h3 className="sm-socials-title m-0 text-base font-medium [color:var(--sm-accent,#ff0000)]">
                   Socials
                 </h3>
-                <ul
-                  className="sm-socials-list list-none m-0 p-0 flex flex-row items-center gap-4 flex-wrap"
-                  role="list"
-                >
+                <ul className="sm-socials-list list-none m-0 p-0 flex flex-row items-center gap-4 flex-wrap">
                   {socialItems.map((s, i) => (
                     <li key={s.label + i} className="sm-socials-item">
                       <a
@@ -619,7 +607,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                     </li>
                   ))}
                 </ul>
-              </div>
+              </nav>
             )}
           </div>
         </aside>

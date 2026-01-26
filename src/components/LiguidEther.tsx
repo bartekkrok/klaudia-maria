@@ -135,18 +135,8 @@ const LiquidEther = memo(function LiquidEther({
   const resizeRafRef = useRef<number | null>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Early return if disabled (reduced motion preference)
-  if (deviceSettings.disabled) {
-    return (
-      <div
-        ref={mountRef}
-        className={`w-full h-full relative overflow-hidden pointer-events-none touch-none ${className || ""}`}
-        style={{ ...style, background: "transparent" }}
-      />
-    );
-  }
-
   // Apply device-specific settings
+  const isDisabled = deviceSettings.disabled;
   const finalResolution = deviceSettings.resolution ?? resolution;
   const finalIterationsPoisson =
     deviceSettings.iterationsPoisson ?? iterationsPoisson;
@@ -156,7 +146,7 @@ const LiquidEther = memo(function LiquidEther({
   const finalCursorSize = deviceSettings.cursorSize ?? cursorSize;
 
   useEffect(() => {
-    if (!mountRef.current) return;
+    if (isDisabled || !mountRef.current) return;
 
     function makePaletteTexture(stops: string[]): THREE.DataTexture {
       let arr: string[];
@@ -766,7 +756,7 @@ const LiquidEther = memo(function LiquidEther({
           uniforms: this.uniforms!,
         });
         this.line = new THREE.LineSegments(boundaryG, boundaryM);
-        this.scene!.add(this.line);
+        this.scene?.add(this.line);
       }
 
       update(...args: any[]) {
@@ -812,7 +802,7 @@ const LiquidEther = memo(function LiquidEther({
           },
         });
         this.mouse = new THREE.Mesh(mouseG, mouseM);
-        this.scene!.add(this.mouse);
+        this.scene?.add(this.mouse);
       }
 
       update(...args: any[]) {
@@ -1119,7 +1109,7 @@ const LiquidEther = memo(function LiquidEther({
       resize() {
         this.calcSize();
         for (const key in this.fbos) {
-          this.fbos[key]!.setSize(this.fboSize.x, this.fboSize.y);
+          this.fbos[key]?.setSize(this.fboSize.x, this.fboSize.y);
         }
       }
 
@@ -1170,7 +1160,7 @@ const LiquidEther = memo(function LiquidEther({
             transparent: true,
             depthWrite: false,
             uniforms: {
-              velocity: { value: this.simulation.fbos.vel_0!.texture },
+              velocity: { value: this.simulation.fbos.vel_0?.texture },
               boundarySpace: { value: new THREE.Vector2() },
               palette: { value: paletteTex },
               bgColor: { value: bgVec4 },
@@ -1284,8 +1274,7 @@ const LiquidEther = memo(function LiquidEther({
           Mouse.dispose();
           if (Common.renderer) {
             const canvas = Common.renderer.domElement;
-            if (canvas && canvas.parentNode)
-              canvas.parentNode.removeChild(canvas);
+            if (canvas?.parentNode) canvas.parentNode.removeChild(canvas);
             Common.renderer.dispose();
           }
         } catch {
@@ -1399,6 +1388,7 @@ const LiquidEther = memo(function LiquidEther({
       webglRef.current = null;
     };
   }, [
+    isDisabled,
     BFECC,
     finalCursorSize,
     dt,

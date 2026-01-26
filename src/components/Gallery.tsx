@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, memo } from "react";
 import { useGesture } from "@use-gesture/react";
 import Image from "next/image";
+import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 
 const galleryImages = [
   "/gallery/IC9A9465_Original.jpg",
@@ -102,7 +102,7 @@ const getDataNumber = (el: HTMLElement, name: string, fallback: number) => {
 };
 
 // Preload first few images for better perceived performance
-const preloadImage = (src: string) => {
+const _preloadImage = (src: string) => {
   const link = document.createElement("link");
   link.rel = "preload";
   link.as = "image";
@@ -114,7 +114,7 @@ const preloadImage = (src: string) => {
 const GalleryItem = memo(
   ({
     item,
-    index,
+    index: _index,
     imageBorderRadius,
     grayscale,
     onItemClick,
@@ -134,7 +134,7 @@ const GalleryItem = memo(
     openingRef: React.MutableRefObject<boolean>;
   }) => {
     const handleClick = useCallback(
-      (e: React.MouseEvent<HTMLDivElement>) => {
+      (e: React.MouseEvent<HTMLButtonElement>) => {
         if (draggingRef.current) return;
         if (movedRef.current) return;
         if (performance.now() - lastDragEndAtRef.current < 80) return;
@@ -145,7 +145,7 @@ const GalleryItem = memo(
     );
 
     const handlePointerUp = useCallback(
-      (e: React.PointerEvent<HTMLDivElement>) => {
+      (e: React.PointerEvent<HTMLButtonElement>) => {
         if ((e.nativeEvent as PointerEvent).pointerType !== "touch") return;
         if (draggingRef.current) return;
         if (movedRef.current) return;
@@ -167,10 +167,10 @@ const GalleryItem = memo(
         data-size-y={item.sizeY}
         style={
           {
-            ["--offset-x" as any]: item.x,
-            ["--offset-y" as any]: item.y,
-            ["--item-size-x" as any]: item.sizeX,
-            ["--item-size-y" as any]: item.sizeY,
+            "--offset-x": item.x,
+            "--offset-y": item.y,
+            "--item-size-x": item.sizeX,
+            "--item-size-y": item.sizeY,
             top: "-999px",
             bottom: "-999px",
             left: "-999px",
@@ -179,10 +179,9 @@ const GalleryItem = memo(
           } as React.CSSProperties
         }
       >
-        <div
-          className="item__image absolute block overflow-hidden cursor-pointer bg-gray-200 transition-transform duration-300"
-          role="button"
-          tabIndex={0}
+        <button
+          type="button"
+          className="item__image absolute block overflow-hidden cursor-pointer bg-gray-200 transition-transform duration-300 border-0 p-0 w-full h-full"
           aria-label={item.alt || "Open image"}
           onClick={handleClick}
           onPointerUp={handlePointerUp}
@@ -207,7 +206,7 @@ const GalleryItem = memo(
               filter: `var(--image-filter, ${grayscale ? "grayscale(1)" : "none"})`,
             }}
           />
-        </div>
+        </button>
       </div>
     );
   },
@@ -463,11 +462,12 @@ export default function DomeGallery({
     openedImageBorderRadius,
     openedImageWidth,
     openedImageHeight,
+    applyTransform,
   ]);
 
   useEffect(() => {
     applyTransform(rotationRef.current.x, rotationRef.current.y);
-  }, []);
+  }, [applyTransform]);
 
   const stopInertia = useCallback(() => {
     if (inertiaRAF.current) {
@@ -510,7 +510,7 @@ export default function DomeGallery({
       stopInertia();
       inertiaRAF.current = requestAnimationFrame(step);
     },
-    [dragDampening, maxVerticalRotationDeg, stopInertia],
+    [dragDampening, maxVerticalRotationDeg, stopInertia, applyTransform],
   );
 
   useGesture(
@@ -520,7 +520,8 @@ export default function DomeGallery({
         stopInertia();
 
         const evt = event as PointerEvent;
-        pointerTypeRef.current = (evt.pointerType as any) || "mouse";
+        pointerTypeRef.current =
+          (evt.pointerType as "mouse" | "pen" | "touch") || "mouse";
         // if (pointerTypeRef.current === "touch") evt.preventDefault();
         // if (pointerTypeRef.current === "touch") lockScroll();
         draggingRef.current = true;
@@ -585,7 +586,7 @@ export default function DomeGallery({
             }
           }
 
-          let [vMagX, vMagY] = velArr;
+          const [vMagX, vMagY] = velArr;
           const [dirX, dirY] = dirArr;
           let vx = vMagX * dirX;
           let vy = vMagY * dirY;
@@ -613,7 +614,9 @@ export default function DomeGallery({
           tapTargetRef.current = null;
 
           if (cancelTapRef.current)
-            setTimeout(() => (cancelTapRef.current = false), 120);
+            setTimeout(() => {
+              cancelTapRef.current = false;
+            }, 120);
           if (pointerTypeRef.current === "touch") unlockScroll();
           if (movedRef.current) lastDragEndAt.current = performance.now();
           movedRef.current = false;
@@ -656,7 +659,7 @@ export default function DomeGallery({
         parent.style.setProperty("--rot-y-delta", `0deg`);
         parent.style.setProperty("--rot-x-delta", `0deg`);
         el.style.visibility = "";
-        (el.style as any).zIndex = 0;
+        el.style.zIndex = "0";
         focusedElRef.current = null;
         rootRef.current?.removeAttribute("data-enlarging");
         openingRef.current = false;
@@ -664,7 +667,9 @@ export default function DomeGallery({
       }
 
       const currentRect = overlay.getBoundingClientRect();
-      const rootRect = rootRef.current!.getBoundingClientRect();
+      const rootRect = rootRef.current?.getBoundingClientRect();
+
+      if (!rootRect) return;
 
       const originalPosRelativeToRoot = {
         left: originalPos.left - rootRect.left,
@@ -707,15 +712,15 @@ export default function DomeGallery({
       }
 
       overlay.remove();
-      rootRef.current!.appendChild(animatingOverlay);
+      rootRef.current?.appendChild(animatingOverlay);
 
       void animatingOverlay.getBoundingClientRect();
 
       requestAnimationFrame(() => {
-        animatingOverlay.style.left = originalPosRelativeToRoot.left + "px";
-        animatingOverlay.style.top = originalPosRelativeToRoot.top + "px";
-        animatingOverlay.style.width = originalPosRelativeToRoot.width + "px";
-        animatingOverlay.style.height = originalPosRelativeToRoot.height + "px";
+        animatingOverlay.style.left = `${originalPosRelativeToRoot.left}px`;
+        animatingOverlay.style.top = `${originalPosRelativeToRoot.top}px`;
+        animatingOverlay.style.width = `${originalPosRelativeToRoot.width}px`;
+        animatingOverlay.style.height = `${originalPosRelativeToRoot.height}px`;
         animatingOverlay.style.opacity = "0";
       });
 
@@ -733,7 +738,7 @@ export default function DomeGallery({
         requestAnimationFrame(() => {
           el.style.visibility = "";
           el.style.opacity = "0";
-          (el.style as any).zIndex = 0;
+          el.style.zIndex = "0";
           focusedElRef.current = null;
           rootRef.current?.removeAttribute("data-enlarging");
 
@@ -829,7 +834,7 @@ export default function DomeGallery({
         height: tileR.height,
       };
       el.style.visibility = "hidden";
-      (el.style as any).zIndex = 0;
+      el.style.zIndex = "0";
       const overlay = document.createElement("div");
       overlay.className = "enlarge";
       overlay.style.cssText = `position:absolute; left:${frameR.left - mainR.left}px; top:${frameR.top - mainR.top}px; width:${frameR.width}px; height:${frameR.height}px; opacity:0; z-index:30; will-change:transform,opacity; transform-origin:top left; transition:transform ${enlargeTransitionMs}ms cubic-bezier(0.4, 0.0, 0.2, 1), opacity ${enlargeTransitionMs}ms cubic-bezier(0.4, 0.0, 0.2, 1); border-radius:${openedImageBorderRadius}; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,.35); contain:layout style paint;`;
@@ -846,14 +851,14 @@ export default function DomeGallery({
       img.alt = rawAlt;
       img.style.cssText = `width:100%; height:100%; object-fit:cover; filter:${grayscale ? "grayscale(1)" : "none"};`;
       overlay.appendChild(img);
-      viewerRef.current!.appendChild(overlay);
+      viewerRef.current?.appendChild(overlay);
       const tx0 = tileR.left - frameR.left;
       const ty0 = tileR.top - frameR.top;
       const sx0 = tileR.width / frameR.width;
       const sy0 = tileR.height / frameR.height;
 
-      const validSx0 = isFinite(sx0) && sx0 > 0 ? sx0 : 1;
-      const validSy0 = isFinite(sy0) && sy0 > 0 ? sy0 : 1;
+      const validSx0 = Number.isFinite(sx0) && sx0 > 0 ? sx0 : 1;
+      const validSy0 = Number.isFinite(sy0) && sy0 > 0 ? sy0 : 1;
 
       overlay.style.transform = `translate(${tx0}px, ${ty0}px) scale(${validSx0}, ${validSy0})`;
       setTimeout(() => {
@@ -874,8 +879,8 @@ export default function DomeGallery({
           overlay.style.width = tempWidth;
           overlay.style.height = tempHeight;
           const newRect = overlay.getBoundingClientRect();
-          overlay.style.width = frameR.width + "px";
-          overlay.style.height = frameR.height + "px";
+          overlay.style.width = `${frameR.width}px`;
+          overlay.style.height = `${frameR.height}px`;
           void overlay.offsetWidth;
           overlay.style.transition = `left ${enlargeTransitionMs}ms ease, top ${enlargeTransitionMs}ms ease, width ${enlargeTransitionMs}ms ease, height ${enlargeTransitionMs}ms ease`;
           const centeredLeft =
@@ -1046,6 +1051,7 @@ export default function DomeGallery({
 
   return (
     <>
+      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: CSS styles are safe */}
       <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
       <div
         id={"gallery"}
@@ -1053,12 +1059,12 @@ export default function DomeGallery({
         className="sphere-root relative w-screen h-screen"
         style={
           {
-            ["--segments-x" as any]: segments,
-            ["--segments-y" as any]: segments,
-            ["--overlay-blur-color" as any]: overlayBlurColor,
-            ["--tile-radius" as any]: imageBorderRadius,
-            ["--enlarge-radius" as any]: openedImageBorderRadius,
-            ["--image-filter" as any]: grayscale ? "grayscale(1)" : "none",
+            "--segments-x": segments,
+            "--segments-y": segments,
+            "--overlay-blur-color": overlayBlurColor,
+            "--tile-radius": imageBorderRadius,
+            "--enlarge-radius": openedImageBorderRadius,
+            "--image-filter": grayscale ? "grayscale(1)" : "none",
           } as React.CSSProperties
         }
       >

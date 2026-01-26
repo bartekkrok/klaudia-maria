@@ -1,10 +1,9 @@
-import Hero from "@/components/Hero";
-import Discography from "@/components/Discography";
-import Background from "@/components/Background";
-import Menu from "@/components/Menu";
-import Gallery from "@/components/Gallery";
 import { headers } from "next/headers";
-import React from "react";
+import Background from "@/components/Background";
+import Discography from "@/components/Discography";
+import Gallery from "@/components/Gallery";
+import Hero from "@/components/Hero";
+import Menu from "@/components/Menu";
 
 export default async function Home() {
   const headersList = await headers();

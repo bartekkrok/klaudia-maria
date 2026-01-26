@@ -1,11 +1,17 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { motion, MotionValue, useScroll, useTransform } from "framer-motion";
+import {
+  type MotionValue,
+  motion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 
 export interface Card {
   id: number | string;
-  iframe: React.ReactNode;
+  iframe: () => React.ReactElement;
 }
 
 interface StackParams {
@@ -26,6 +32,7 @@ const DEFAULT_PARAMS: StackParams = {
 
 const ToksycznyIframe = () => (
   <iframe
+    title="Toksyczny - Spotify Player"
     style={{ borderRadius: "12px" }}
     src="https://open.spotify.com/embed/track/6yRyOXOi8aZyT1BQFIAses?utm_source=generator"
     width="100%"
@@ -37,6 +44,7 @@ const ToksycznyIframe = () => (
 
 const GhostingIframe = () => (
   <iframe
+    title="Ghosting - Spotify Player"
     style={{ borderRadius: "12px" }}
     src="https://open.spotify.com/embed/track/3P4u2xwspyWcwN6BUt1YAw?utm_source=generator"
     width="100%"
@@ -48,6 +56,7 @@ const GhostingIframe = () => (
 
 const ChceZapomniecIframe = () => (
   <iframe
+    title="Chcę zapomnieć - Spotify Player"
     style={{ borderRadius: "12px" }}
     src="https://open.spotify.com/embed/track/2pOe7Ambcy8TooJUazmBwC?utm_source=generator"
     width="100%"
@@ -59,6 +68,7 @@ const ChceZapomniecIframe = () => (
 
 const NoweRozdanieIframe = () => (
   <iframe
+    title="Nowe rozdanie - Spotify Player"
     style={{ borderRadius: "12px" }}
     src="https://open.spotify.com/embed/track/1ZPYNtCNTDXj4tJzaXCQWS?utm_source=generator&theme=0"
     width="100%"
@@ -71,6 +81,7 @@ const NoweRozdanieIframe = () => (
 const MialamWiareIframe = () => {
   return (
     <iframe
+      title="Miałam wiarę - Spotify Player"
       style={{ borderRadius: "12px" }}
       src="https://open.spotify.com/embed/track/7ak8O1AmGGafGcOr4a9m0b?utm_source=generator"
       width="100%"
@@ -85,6 +96,7 @@ const MialamWiareIframe = () => {
 const BrakujeTchuIframe = () => {
   return (
     <iframe
+      title="Brakuje tchu - Spotify Player"
       style={{ borderRadius: "12px" }}
       src="https://open.spotify.com/embed/track/6GRvoG794YU0N0tIVdslp9?utm_source=generator"
       width="100%"
@@ -149,6 +161,51 @@ const useCardAnimation = (
   return { y, scale };
 };
 
+interface CardItemProps {
+  card: Card;
+  index: number;
+  totalCards: number;
+  viewportHeight: number;
+  scrollYProgress: MotionValue<number>;
+}
+
+const CardItem = ({
+  card,
+  index,
+  totalCards,
+  viewportHeight,
+  scrollYProgress,
+}: CardItemProps) => {
+  const { y, scale } = useCardAnimation(
+    scrollYProgress,
+    index,
+    totalCards,
+    viewportHeight,
+  );
+  const IframeComponent = card.iframe;
+
+  return (
+    <motion.div
+      key={card.id}
+      style={{
+        y,
+        scale,
+        zIndex: index + 1,
+        position: "absolute",
+        width: "70%",
+        height: 352,
+        margin: "auto",
+        inset: 0,
+        transformOrigin: "top center",
+        boxShadow: "0 8px 40px rgba(0,0,0,0.4)",
+      }}
+      className="rounded-2xl overflow-hidden"
+    >
+      <IframeComponent />
+    </motion.div>
+  );
+};
+
 const ScrollStack = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [viewportHeight, setViewportHeight] = useState(800);
@@ -173,36 +230,16 @@ const ScrollStack = () => {
         <div className="h-1 w-24 bg-gradient-accent mx-auto" />
       </div>
       <div className="sticky top-0 h-screen w-full">
-        {cards.map((card, index) => {
-          const { y, scale } = useCardAnimation(
-            scrollYProgress,
-            index,
-            cards.length,
-            viewportHeight,
-          );
-          const IframeComponent = card.iframe;
-
-          return (
-            <motion.div
-              key={card.id}
-              style={{
-                y,
-                scale,
-                zIndex: index + 1,
-                position: "absolute",
-                width: "70%",
-                height: 352,
-                margin: "auto",
-                inset: 0,
-                transformOrigin: "top center",
-                boxShadow: "0 8px 40px rgba(0,0,0,0.4)",
-              }}
-              className="rounded-2xl overflow-hidden"
-            >
-              <IframeComponent />
-            </motion.div>
-          );
-        })}
+        {cards.map((card, index) => (
+          <CardItem
+            key={card.id}
+            card={card}
+            index={index}
+            totalCards={cards.length}
+            viewportHeight={viewportHeight}
+            scrollYProgress={scrollYProgress}
+          />
+        ))}
       </div>
     </div>
   );
