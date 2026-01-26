@@ -1,6 +1,9 @@
+"use client";
+
+import { memo } from "react";
 import LiquidEther from "@/components/LiguidEther";
 
-const Background = () => {
+const Background = memo(() => {
   return (
     <div
       style={{
@@ -9,7 +12,10 @@ const Background = () => {
         position: "fixed",
         zIndex: -1,
         top: 0,
+        left: 0,
         opacity: 0.3,
+        pointerEvents: "none",
+        contain: "layout style paint",
       }}
     >
       <LiquidEther
@@ -20,7 +26,7 @@ const Background = () => {
         viscous={30}
         iterationsViscous={32}
         iterationsPoisson={32}
-        resolution={0.5}
+        resolution={0.5} // Will auto-adjust to 0.25 on mobile
         isBounce={false}
         autoDemo={true}
         autoSpeed={0.5}
@@ -31,6 +37,8 @@ const Background = () => {
       />
     </div>
   );
-};
+});
+
+Background.displayName = "Background";
 
 export default Background;

@@ -1,0 +1,179 @@
+# Cursor AI Rules - Klaudia Maria Project
+
+## Code Style & Formatting
+
+- **Formatter**: Use Biome (NOT Prettier or ESLint)
+- **Indentation**: 2 spaces (no tabs)
+- **Quotes**: Double quotes for strings
+- **Semicolons**: Required
+- **Line Length**: Max 100 characters (preferred 80)
+- **Trailing Commas**: Always use in multiline objects/arrays
+- **Import Organization**: Biome auto-organizes imports
+
+## File Naming Conventions
+
+- **Components**: PascalCase (e.g., `Gallery.tsx`, `LiquidEther.tsx`)
+- **Utilities**: camelCase (e.g., `utils.ts`, `helpers.ts`)
+- **Hooks**: camelCase with `use` prefix (e.g., `useScroll.ts`)
+- **Types**: PascalCase in separate files or inline (e.g., `types.ts`)
+- **Constants**: UPPER_SNAKE_CASE (e.g., `const MAX_WIDTH = 100`)
+
+## TypeScript
+
+- **Strict Mode**: Enabled
+- **Type Imports**: Use `import type` when possible
+- **Props**: Define interface for component props
+- **Avoid `any`**: Use proper types or `unknown`
+- **Nullable**: Use `| null` explicitly when needed
+
+## React Best Practices
+
+- **Components**: Prefer function components
+- **Hooks**: Follow rules of hooks (no conditional calls)
+- **Memoization**: Use `React.memo()`, `useMemo()`, `useCallback()` for performance
+- **Event Handlers**: Prefix with `handle` (e.g., `handleClick`)
+- **Async**: Use `async/await` over `.then()`
+- **Client Components**: Mark with `"use client"` when needed
+
+## Performance
+
+- **Images**: Always use `next/image` (NOT `<img>`)
+- **Lazy Loading**: Use for heavy components
+- **Code Splitting**: Dynamic imports for large components
+- **CSS**: Use Tailwind classes, avoid inline styles when possible
+- **Animations**: Prefer CSS/Tailwind over JS when possible
+- **Memoization**: Apply for expensive computations and component props
+
+## Next.js Specifics
+
+- **App Router**: Use app directory structure
+- **Server Components**: Default (no "use client" unless needed)
+- **Metadata**: Export metadata object from pages
+- **Loading States**: Use loading.tsx files
+- **Error Handling**: Use error.tsx files
+
+## Tailwind CSS
+
+- **Utility First**: Use Tailwind utilities
+- **Custom Classes**: Only when absolutely necessary
+- **Responsive**: Mobile-first approach (default → sm → md → lg → xl)
+- **Dark Mode**: Use `dark:` variant when needed
+- **Spacing**: Use Tailwind spacing scale (p-4, m-2, etc.)
+
+## Biome Specific
+
+- **Auto-fix**: Run `npm run format` to auto-fix issues
+- **Linting**: Run `npm run lint` before commit
+- **Organization**: Biome auto-organizes imports on save
+- **Configuration**: See `biome.json` for rules
+
+## Git Commit Messages
+
+- **Format**: `type: description`
+- **Types**: feat, fix, docs, style, refactor, perf, test, chore
+- **Examples**:
+  - `feat: add lazy loading to gallery`
+  - `fix: resolve memory leak in LiquidEther`
+  - `perf: optimize image loading`
+
+## Project Structure
+
+```
+src/
+├── app/              # Next.js app router pages
+├── components/       # React components
+├── lib/             # Utility functions
+├── hooks/           # Custom React hooks
+├── types/           # TypeScript types
+└── styles/          # Global styles
+```
+
+## Performance Targets
+
+- **FPS**: 60 (desktop), 45+ (mobile)
+- **LCP**: < 2.5s
+- **FID**: < 100ms
+- **CLS**: < 0.1
+- **Bundle Size**: Keep minimal
+
+## Accessibility
+
+- **Semantic HTML**: Use proper HTML5 elements
+- **ARIA**: Add when semantic HTML isn't enough
+- **Keyboard Navigation**: Support Tab, Enter, Esc
+- **Focus Indicators**: Always visible
+- **Reduced Motion**: Respect `prefers-reduced-motion`
+- **Alt Text**: Required for all images
+
+## Testing
+
+- **Before Commit**: Run `npm run build` to ensure it compiles
+- **Linting**: Run `npm run lint` to check for issues
+- **Format**: Run `npm run format` to auto-fix formatting
+
+## Common Patterns
+
+### Component Template
+```tsx
+"use client"; // Only if needed
+
+import { memo } from "react";
+import type { ComponentProps } from "./types";
+
+const MyComponent = memo(({ prop1, prop2 }: ComponentProps) => {
+  // Component logic
+  return <div>Content</div>;
+});
+
+MyComponent.displayName = "MyComponent";
+
+export default MyComponent;
+```
+
+### Memoized Component with Callbacks
+```tsx
+const MyComponent = memo(({ onClick }: Props) => {
+  const handleClick = useCallback(() => {
+    onClick();
+  }, [onClick]);
+
+  return <button onClick={handleClick}>Click</button>;
+});
+```
+
+## Dependencies
+
+- **Adding**: Use `npm install` (NOT yarn or pnpm for consistency)
+- **Version**: Let npm choose latest compatible version
+- **Dev vs Prod**: Put correctly in devDependencies vs dependencies
+
+## Comments
+
+- **When**: Explain WHY, not WHAT
+- **JSDoc**: For public APIs and complex functions
+- **TODO**: Mark with `// TODO: description`
+- **FIXME**: Mark with `// FIXME: description`
+
+## Security
+
+- **Env Variables**: Use `.env.local` (never commit)
+- **API Keys**: Never hardcode, use env variables
+- **User Input**: Always sanitize and validate
+
+## Mobile Optimization
+
+- **Responsive**: Test on mobile viewport
+- **Touch**: Support touch events
+- **Performance**: Lower settings on mobile devices
+- **Viewport**: Use proper meta viewport tag
+
+## Language
+
+- **Code**: English (variables, functions, comments)
+- **UI Text**: Polish (user-facing content)
+- **Documentation**: Polish (project docs)
+
+---
+
+**Last Updated**: 2026-01-26
+**Biome Version**: 2.2.0
