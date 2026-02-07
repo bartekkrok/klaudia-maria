@@ -136,7 +136,7 @@ const SongCardComponent = ({ song }: { song: SongData }) => {
       style={{ backgroundColor: song.color }}
     >
       <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay bg-noise" />
-      <div className="absolute right-[40px] top-[40px]">
+      <div className="absolute right-[20px] top-[20px] sm:right-[40px] sm:top-[40px]">
         <a
           href={song.spotifyUrl}
           target="_blank"

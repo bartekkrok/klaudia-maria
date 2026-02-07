@@ -1,10 +1,10 @@
 import { headers } from "next/headers";
 import Background from "@/components/Background";
 import Discography from "@/components/Discography";
-import Gallery from "@/components/Gallery";
 import Hero from "@/components/Hero";
 import Menu from "@/components/Menu";
 import Contact from "@/components/Contact";
+import MasonryGallerySection from "@/components/MasonryGallerySection";
 
 export default async function Home() {
   const headersList = await headers();
@@ -20,15 +20,13 @@ export default async function Home() {
       <main>
         <Hero />
         <Discography />
+
         <section>
           <div className="top-0 text-center fade-in pt-[80px] pb-[80px] max-md:pb-0 max-md:pt-0">
             <h2 className="text-5xl md:text-6xl font-bold mb-4">Galeria</h2>
             <div className="h-1 w-24 bg-gradient-accent mx-auto" />
           </div>
-          <Gallery
-            maxVerticalRotationDeg={isMobile ? 0 : 5}
-            grayscale={false}
-          />
+          <MasonryGallerySection />
         </section>
       </main>
       <Contact />
