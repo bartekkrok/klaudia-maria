@@ -47,6 +47,24 @@ const galleryImages = [
   "/gallery/IMG_8928.jpg",
   "/gallery/IMG_9349.jpg",
   "/gallery/IMG_9822.jpg",
+  "/gallery/1.jpg",
+  "/gallery/2.jpg",
+  "/gallery/3.jpg",
+  "/gallery/4.jpg",
+  "/gallery/5.jpg",
+  "/gallery/6.jpg",
+  "/gallery/7.jpg",
+  "/gallery/8.jpg",
+  "/gallery/9.jpg",
+  "/gallery/10.jpg",
+  "/gallery/11.jpg",
+  "/gallery/12.jpg",
+  "/gallery/13.jpg",
+  "/gallery/14.jpg",
+  "/gallery/15.jpg",
+  "/gallery/16.jpg",
+  "/gallery/_1.png",
+  "/gallery/_4.png",
 ];
 
 type ImageItem = string | { src: string; alt?: string };
@@ -186,7 +204,7 @@ const GalleryItem = memo(
           onClick={handleClick}
           onPointerUp={handlePointerUp}
           style={{
-            inset: "10px",
+            inset: "0",
             borderRadius: `var(--tile-radius, ${imageBorderRadius})`,
             backfaceVisibility: "hidden",
             contain: "layout style paint",
@@ -957,10 +975,10 @@ export default function DomeGallery({
       --item-width: calc(var(--circ) / var(--segments-x));
       --item-height: calc(var(--circ) / var(--segments-y));
     }
-    
+
     .sphere-root * { box-sizing: border-box; }
     .sphere, .sphere-item, .item__image { transform-style: preserve-3d; }
-    
+
     .stage {
       width: 100%;
       height: 100%;
@@ -974,16 +992,16 @@ export default function DomeGallery({
       transform: translateZ(0);
       -webkit-transform: translateZ(0);
     }
-    
+
     .sphere {
       transform: translateZ(calc(var(--radius) * -1));
       position: absolute;
     }
-    
+
     .sphere.animating {
       will-change: transform;
     }
-    
+
     .sphere-item {
       width: calc(var(--item-width) * var(--item-size-x));
       height: calc(var(--item-height) * var(--item-size-y));
@@ -997,26 +1015,26 @@ export default function DomeGallery({
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       transition: transform 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
-      transform: rotateY(calc(var(--rot-y) * (var(--offset-x) + ((var(--item-size-x) - 1) / 2)) + var(--rot-y-delta, 0deg))) 
-                 rotateX(calc(var(--rot-x) * (var(--offset-y) - ((var(--item-size-y) - 1) / 2)) + var(--rot-x-delta, 0deg))) 
+      transform: rotateY(calc(var(--rot-y) * (var(--offset-x) + ((var(--item-size-x) - 1) / 2)) + var(--rot-y-delta, 0deg)))
+                 rotateX(calc(var(--rot-x) * (var(--offset-y) - ((var(--item-size-y) - 1) / 2)) + var(--rot-x-delta, 0deg)))
                  translateZ(var(--radius));
-      -webkit-transform: rotateY(calc(var(--rot-y) * (var(--offset-x) + ((var(--item-size-x) - 1) / 2)) + var(--rot-y-delta, 0deg))) 
-                         rotateX(calc(var(--rot-x) * (var(--offset-y) - ((var(--item-size-y) - 1) / 2)) + var(--rot-x-delta, 0deg))) 
+      -webkit-transform: rotateY(calc(var(--rot-y) * (var(--offset-x) + ((var(--item-size-x) - 1) / 2)) + var(--rot-y-delta, 0deg)))
+                         rotateX(calc(var(--rot-x) * (var(--offset-y) - ((var(--item-size-y) - 1) / 2)) + var(--rot-x-delta, 0deg)))
                          translateZ(var(--radius));
     }
-    
+
     .sphere-root[data-enlarging="true"] .scrim {
       opacity: 1 !important;
       pointer-events: all !important;
     }
-    
+
     @media (max-aspect-ratio: 1/1) {
       .viewer-frame {
         height: auto !important;
         width: 100% !important;
       }
     }
-    
+
     // body.dg-scroll-lock {
     //   position: fixed !important;
     //   top: 0;
@@ -1029,7 +1047,8 @@ export default function DomeGallery({
     // }
     .item__image {
       position: absolute;
-      inset: 10px;
+      height: calc(100% - 10px);
+      width: calc(100% - 10px);
       border-radius: var(--tile-radius, 12px);
       overflow: hidden;
       cursor: pointer;

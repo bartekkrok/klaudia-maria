@@ -2,7 +2,7 @@ import { gsap } from "gsap";
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 const headerMobileStyles =
-  "max-md:h-auto max-md:w-full max-md:bg-pink-100 max-md:rounded-md max-md:bg-clip-padding max-md:backdrop-filter max-md:backdrop-blur-md max-md:bg-opacity-30 max-md:pointer-events-auto";
+  "max-md:h-auto max-md:w-full max-md:bg-pink-100 max-md:rounded-md max-md:bg-clip-padding max-md:backdrop-filter max-md:backdrop-blur-md max-md:bg-opacity-30 max-md:pointer-events-auto [mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)]";
 
 export interface StaggeredMenuItem {
   label: string;
@@ -616,7 +616,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
         <style>{`
 .sm-scope .staggered-menu-wrapper { position: relative; width: 100%; height: 100%; z-index: 40; }
-.sm-scope .staggered-menu-header { position: absolute; top: 0; left: 0; width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 2em; pointer-events: none; z-index: 20; }
+.sm-scope .staggered-menu-header { position: absolute; top: 0; left: 0; width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 2em; padding-bottom: 4em; pointer-events: none; z-index: 20; }
 .sm-scope .staggered-menu-header > * { pointer-events: auto; }
 .sm-scope .sm-logo { display: flex; align-items: center; user-select: none; }
 .sm-scope .sm-logo-img { display: block; height: 32px; width: auto; object-fit: contain; }

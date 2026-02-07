@@ -8,14 +8,14 @@ const Contact = memo(() => {
       id="contact"
       className="bg-white rounded-[16px] shadow-sm dark:bg-gray-900 m-4 mb-4"
     >
-      <div className="w-full max-w-screen-xl mx-auto p-8 md:py-12">
-        <div className="text-center mb-8">
+      <div className="w-full max-w-screen-xl mx-auto p-3 md:py-12">
+        <div className="text-center mb-4 md:mb-8">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Kontakt</h2>
           <div className="h-1 w-24 bg-gradient-accent mx-auto mb-6" />
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-6">
-          <div className="flex items-center gap-4 text-center">
+        <div className="flex flex-col items-center justify-center gap-4 md:gap-6">
+          <div className="flex items-center gap-2 md:gap-4 text-center">
             <svg
               className="w-8 h-8 text-[#d742a5]"
               fill="none"
