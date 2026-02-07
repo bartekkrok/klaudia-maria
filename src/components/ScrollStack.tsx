@@ -296,54 +296,53 @@ interface CardItemProps {
   scrollYProgress: MotionValue<number>;
 }
 
-const CardItem = memo(
-  ({
-    song,
+const CardItemComponent = ({
+  song,
+  index,
+  totalCards,
+  viewportHeight,
+  scrollYProgress,
+}: CardItemProps) => {
+  const { y, scale } = useCardAnimation(
+    scrollYProgress,
     index,
     totalCards,
     viewportHeight,
-    scrollYProgress,
-  }: CardItemProps) => {
-    const { y, scale } = useCardAnimation(
-      scrollYProgress,
-      index,
-      totalCards,
-      viewportHeight,
-    );
+  );
 
-    const cardStyle = useMemo(
-      () => ({
-        y,
-        scale,
-        zIndex: index + 1,
-        position: "absolute" as const,
-        width: "min(90%, 650px)",
-        height: 352,
-        margin: "auto",
-        inset: 0,
-        transformOrigin: "top center",
-        boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
-        willChange: "transform, opacity",
-        contain: "layout style paint",
-      }),
-      [y, scale, index],
-    );
+  const cardStyle = useMemo(
+    () => ({
+      y,
+      scale,
+      zIndex: index + 1,
+      position: "absolute" as const,
+      width: "70%",
+      height: 352,
+      margin: "auto",
+      inset: 0,
+      transformOrigin: "top center",
+      boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
+      willChange: "transform, opacity",
+      contain: "layout style paint",
+    }),
+    [y, scale, index],
+  );
 
-    return (
-      <motion.div
-        layoutId={`card-${song.id}`}
-        style={cardStyle}
-        className="rounded-2xl overflow-hidden"
-      >
-        <SongCard song={song} />
-      </motion.div>
-    );
-  },
-);
+  return (
+    <motion.div
+      layoutId={`card-${song.id}`}
+      style={cardStyle}
+      className="rounded-2xl overflow-hidden"
+    >
+      <SongCard song={song} />
+    </motion.div>
+  );
+};
 
+const CardItem = memo(CardItemComponent);
 CardItem.displayName = "CardItem";
 
-const ScrollStack = memo(() => {
+const ScrollsStackComponent = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [viewportHeight, setViewportHeight] = useState(800);
   const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -414,7 +413,9 @@ const ScrollStack = memo(() => {
       </div>
     </div>
   );
-});
+};
+
+const ScrollStack = memo(ScrollsStackComponent);
 
 ScrollStack.displayName = "ScrollStack";
 
