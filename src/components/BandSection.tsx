@@ -4,10 +4,30 @@ import { useRef } from "react";
 import PixelCard from "@/components/PixelCard";
 
 const bandMembers = [
-  { name: "Klaudia", video: "/band/klaudia.mp4", variant: "pink" as const },
-  { name: "Daniel", video: "/band/daniel.mp4", variant: "pink" as const },
-  { name: "Mateusz", video: "/band/mateusz.mp4", variant: "pink" as const },
-  { name: "Bartek", video: "/band/bartek.mp4", variant: "pink" as const },
+  {
+    name: "Klaudia",
+    video: "/band/klaudia.mp4",
+    poster: "/band/klaudia_poster.png",
+    variant: "pink" as const,
+  },
+  {
+    name: "Daniel",
+    video: "/band/daniel.mp4",
+    poster: "/band/daniel_poster.png",
+    variant: "pink" as const,
+  },
+  {
+    name: "Mateusz",
+    video: "/band/mateusz.mp4",
+    poster: "/band/mateusz_poster.png",
+    variant: "pink" as const,
+  },
+  {
+    name: "Bartek",
+    video: "/band/bartek.mp4",
+    poster: "/band/bartek_poster.png",
+    variant: "pink" as const,
+  },
 ];
 
 const BandMemberCard = ({
@@ -47,6 +67,7 @@ const BandMemberCard = ({
         <video
           ref={videoRef}
           src={member.video}
+          poster={member.poster}
           muted
           loop
           playsInline
