@@ -4,6 +4,7 @@ import StaggeredMenu from "./StaggeredMenu";
 
 const menuItems = [
   { label: "Wstęp", ariaLabel: "Wstęp", link: "#hero" },
+  { label: "Zespół", ariaLabel: "Zespół", link: "#band" },
   { label: "Dyskografia", ariaLabel: "Dyskografia", link: "#discography" },
   { label: "Galeria", ariaLabel: "Galeria", link: "#gallery" },
   { label: "Kontakt", ariaLabel: "Kontakt", link: "#contact" },

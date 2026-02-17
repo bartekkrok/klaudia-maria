@@ -1,4 +1,6 @@
-import { JSX, useEffect, useRef } from "react";
+"use client";
+
+import { type JSX, useCallback, useEffect, useRef } from "react";
 
 class Pixel {
   width: number;
@@ -28,6 +30,7 @@ class Pixel {
     color: string,
     speed: number,
     delay: number,
+    maxSizeInteger: number,
   ) {
     this.width = canvas.width;
     this.height = canvas.height;
@@ -39,7 +42,7 @@ class Pixel {
     this.size = 0;
     this.sizeStep = Math.random() * 0.4;
     this.minSize = 0.5;
-    this.maxSizeInteger = 2;
+    this.maxSizeInteger = maxSizeInteger;
     this.maxSize = this.getRandomValue(this.minSize, this.maxSizeInteger);
     this.delay = delay;
     this.counter = 0;
@@ -159,6 +162,8 @@ interface PixelCardProps {
   colors?: string;
   noFocus?: boolean;
   className?: string;
+  pixelSize?: number;
+  initialActive?: boolean;
   children: React.ReactNode;
 }
 
@@ -177,6 +182,8 @@ export default function PixelCard({
   colors,
   noFocus,
   className = "",
+  pixelSize,
+  initialActive,
   children,
 }: PixelCardProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -195,8 +202,9 @@ export default function PixelCard({
   const finalSpeed = speed ?? variantCfg.speed;
   const finalColors = colors ?? variantCfg.colors;
   const finalNoFocus = noFocus ?? variantCfg.noFocus;
+  const finalPixelSize = pixelSize ?? 2;
 
-  const initPixels = () => {
+  const initPixels = useCallback(() => {
     if (!containerRef.current || !canvasRef.current) return;
 
     const rect = containerRef.current.getBoundingClientRect();
@@ -230,14 +238,15 @@ export default function PixelCard({
             color,
             getEffectiveSpeed(finalSpeed, reducedMotion),
             delay,
+            finalPixelSize,
           ),
         );
       }
     }
     pixelsRef.current = pxs;
-  };
+  }, [finalColors, finalGap, finalPixelSize, finalSpeed, reducedMotion]);
 
-  const doAnimate = (fnName: keyof Pixel) => {
+  const doAnimate = useCallback((fnName: keyof Pixel) => {
     animationRef.current = requestAnimationFrame(() => doAnimate(fnName));
     const timeNow = performance.now();
     const timePassed = timeNow - timePreviousRef.current;
@@ -254,7 +263,7 @@ export default function PixelCard({
     let allIdle = true;
     for (let i = 0; i < pixelsRef.current.length; i++) {
       const pixel = pixelsRef.current[i];
-      // @ts-ignore
+      // @ts-expect-error
       pixel[fnName]();
       if (!pixel.isIdle) {
         allIdle = false;
@@ -263,42 +272,53 @@ export default function PixelCard({
     if (allIdle) {
       cancelAnimationFrame(animationRef.current);
     }
-  };
+  }, []); // Updated dependency
 
-  const handleAnimation = (name: keyof Pixel) => {
-    if (animationRef.current !== null) {
-      cancelAnimationFrame(animationRef.current);
-    }
-    animationRef.current = requestAnimationFrame(() => doAnimate(name));
-  };
+  const handleAnimation = useCallback(
+    (name: keyof Pixel) => {
+      if (animationRef.current !== null) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      animationRef.current = requestAnimationFrame(() => doAnimate(name));
+    },
+    [doAnimate],
+  );
 
-  const onMouseEnter = () => handleAnimation("appear");
-  const onMouseLeave = () => handleAnimation("disappear");
+  const onMouseEnter = () => handleAnimation("disappear");
+  const onMouseLeave = () => handleAnimation("appear");
   const onFocus: React.FocusEventHandler<HTMLDivElement> = (e) => {
     if (e.currentTarget.contains(e.relatedTarget)) return;
-    handleAnimation("appear");
+    handleAnimation("disappear");
   };
   const onBlur: React.FocusEventHandler<HTMLDivElement> = (e) => {
     if (e.currentTarget.contains(e.relatedTarget)) return;
-    handleAnimation("disappear");
+    handleAnimation("appear");
   };
 
   useEffect(() => {
     initPixels();
+    if (initialActive) {
+      handleAnimation("appear");
+    }
+
     const observer = new ResizeObserver(() => {
       initPixels();
+      if (initialActive) {
+        handleAnimation("appear");
+      }
     });
+
     if (containerRef.current) {
       observer.observe(containerRef.current);
     }
+
     return () => {
       observer.disconnect();
       if (animationRef.current !== null) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [finalGap, finalSpeed, finalColors, finalNoFocus]);
+  }, [initialActive, initPixels, handleAnimation]);
 
   return (
     <div
@@ -310,7 +330,7 @@ export default function PixelCard({
       onBlur={finalNoFocus ? undefined : onBlur}
       tabIndex={finalNoFocus ? -1 : 0}
     >
-      <canvas className="w-full h-full block" ref={canvasRef} />
+      <canvas className="opacity-75 z-10 w-full h-full block" ref={canvasRef} />
       {children}
     </div>
   );

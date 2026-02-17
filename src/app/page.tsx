@@ -1,10 +1,11 @@
 import { headers } from "next/headers";
 import Background from "@/components/Background";
+import BandSection from "@/components/BandSection";
+import Contact from "@/components/Contact";
 import Discography from "@/components/Discography";
 import Hero from "@/components/Hero";
-import Menu from "@/components/Menu";
-import Contact from "@/components/Contact";
 import MasonryGallerySection from "@/components/MasonryGallerySection";
+import Menu from "@/components/Menu";
 
 export default async function Home() {
   const headersList = await headers();
@@ -19,6 +20,7 @@ export default async function Home() {
       <Menu />
       <main>
         <Hero />
+        <BandSection />
         <Discography />
 
         <section>
