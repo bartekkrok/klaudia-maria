@@ -50,7 +50,8 @@ const BandMemberCard = ({
           muted
           loop
           playsInline
-          className="absolute opacity-85 inset-0 w-full h-full object-cover pointer-events-none grayscale group-hover:grayscale-0 transition-all duration-500"
+          preload="auto"
+          className="absolute opacity-85 inset-0 w-full h-full object-cover pointer-events-none grayscale group-hover:grayscale-0 transition-all duration-500 bg-gray-900"
         />
         <div className="absolute inset-0 flex items-end justify-center p-6 pointer-events-none z-10">
           <h3 className="text-3xl font-bold text-white drop-shadow-[5px_5px_3px_rgba(0,0,0,0.9)] tracking-wider">
