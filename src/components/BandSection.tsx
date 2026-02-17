@@ -4,10 +4,10 @@ import { useRef } from "react";
 import PixelCard from "@/components/PixelCard";
 
 const bandMembers = [
-  { name: "Klaudia", video: "/band/klaudia.mp4", variant: "pink" },
-  { name: "Daniel", video: "/band/daniel.mp4", variant: "pink" },
-  { name: "Mateusz", video: "/band/mateusz.mp4", variant: "pink" },
-  { name: "Bartek", video: "/band/bartek.mp4", variant: "pink" },
+  { name: "Klaudia", video: "/band/klaudia.mp4", variant: "pink" as const },
+  { name: "Daniel", video: "/band/daniel.mp4", variant: "pink" as const },
+  { name: "Mateusz", video: "/band/mateusz.mp4", variant: "pink" as const },
+  { name: "Bartek", video: "/band/bartek.mp4", variant: "pink" as const },
 ];
 
 const BandMemberCard = ({
