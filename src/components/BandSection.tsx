@@ -39,9 +39,9 @@ const BandMemberCard = ({
     >
       <PixelCard
         variant={member.variant}
-        gap={3}
+        gap={5}
         initialActive
-        pixelSize={4}
+        pixelSize={5}
         className="!w-full !h-auto !aspect-[9/16]"
       >
         <video

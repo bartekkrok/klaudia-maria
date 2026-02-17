@@ -204,6 +204,8 @@ export default function PixelCard({
   const finalNoFocus = noFocus ?? variantCfg.noFocus;
   const finalPixelSize = pixelSize ?? 2;
 
+  const isInViewRef = useRef(false);
+
   const initPixels = useCallback(() => {
     if (!containerRef.current || !canvasRef.current) return;
 
@@ -248,6 +250,9 @@ export default function PixelCard({
 
   const doAnimate = useCallback((fnName: keyof Pixel) => {
     animationRef.current = requestAnimationFrame(() => doAnimate(fnName));
+
+    if (!isInViewRef.current) return;
+
     const timeNow = performance.now();
     const timePassed = timeNow - timePreviousRef.current;
     const timeInterval = 1000 / 60;
@@ -263,7 +268,7 @@ export default function PixelCard({
     let allIdle = true;
     for (let i = 0; i < pixelsRef.current.length; i++) {
       const pixel = pixelsRef.current[i];
-      // @ts-expect-error
+      // @ts-expect-error type safety
       pixel[fnName]();
       if (!pixel.isIdle) {
         allIdle = false;
@@ -272,7 +277,7 @@ export default function PixelCard({
     if (allIdle) {
       cancelAnimationFrame(animationRef.current);
     }
-  }, []); // Updated dependency
+  }, []);
 
   const handleAnimation = useCallback(
     (name: keyof Pixel) => {
@@ -283,6 +288,23 @@ export default function PixelCard({
     },
     [doAnimate],
   );
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isInViewRef.current = entry.isIntersecting;
+      },
+      { threshold: 0 },
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   const onMouseEnter = () => handleAnimation("disappear");
   const onMouseLeave = () => handleAnimation("appear");
