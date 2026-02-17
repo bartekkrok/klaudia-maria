@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  motion,
   type MotionValue,
+  motion,
   useScroll,
   useTransform,
 } from "framer-motion";
@@ -126,6 +126,14 @@ const songs: SongData[] = [
     color: "rgb(149, 33, 73)",
     spotifyUrl: "https://open.spotify.com/track/6GRvoG794YU0N0tIVdslp9",
     coverImage: "/songs/brakujetchu.jpeg",
+  },
+  {
+    id: 7,
+    title: "Wernisaż",
+    artists: [artistKlaudiaMaria],
+    color: "rgb(28, 45, 80)",
+    spotifyUrl: "https://open.spotify.com/track/7pjiQBQyMhdgUZzitMm6xO",
+    coverImage: "/songs/wernisaz.jpeg",
   },
 ];
 
