@@ -1,3 +1,4 @@
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair } from "next/font/google";
 import "./globals.css";
@@ -33,6 +34,7 @@ export default function RootLayout({
         className={`${playfair.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
