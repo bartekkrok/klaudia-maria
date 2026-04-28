@@ -52,8 +52,9 @@ const BandMemberCard = ({
   };
 
   return (
-    <div
-      className="w-full max-w-[400px] group cursor-pointer"
+    <button
+      type="button"
+      className="w-full max-w-[400px] group cursor-pointer border-none bg-transparent p-0 text-left block"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -80,7 +81,7 @@ const BandMemberCard = ({
           </h3>
         </div>
       </PixelCard>
-    </div>
+    </button>
   );
 };
 

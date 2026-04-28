@@ -135,6 +135,14 @@ const songs: SongData[] = [
     spotifyUrl: "https://open.spotify.com/track/7pjiQBQyMhdgUZzitMm6xO",
     coverImage: "/songs/wernisaz.jpeg",
   },
+  {
+    id: 8,
+    title: "Papierowa Dama",
+    artists: [artistKlaudiaMaria],
+    color: "rgb(68, 64, 60)",
+    spotifyUrl: "https://open.spotify.com/track/10uCAz6AfQR0IulzYcFxCt",
+    coverImage: "/songs/papierowa-dama.jpeg",
+  },
 ];
 
 const SongCardComponent = ({ song }: { song: SongData }) => {
