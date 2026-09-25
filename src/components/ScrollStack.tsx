@@ -143,6 +143,14 @@ const songs: SongData[] = [
     spotifyUrl: "https://open.spotify.com/track/10uCAz6AfQR0IulzYcFxCt",
     coverImage: "/songs/papierowa-dama.jpeg",
   },
+  {
+    id: 9,
+    title: "undercOVER",
+    artists: [artistKlaudiaMaria],
+    color: "rgb(72, 85, 99)",
+    spotifyUrl: "https://open.spotify.com/track/1WMyGEBDcfWI30EVZtMjsP",
+    coverImage: "/songs/undercover.jpeg",
+  },
 ];
 
 const SongCardComponent = ({ song }: { song: SongData }) => {
@@ -175,6 +183,7 @@ const SongCardComponent = ({ song }: { song: SongData }) => {
               src={song.coverImage}
               alt={song.title}
               fill
+              sizes="(max-width: 768px) 144px, 256px"
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
